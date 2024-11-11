@@ -1,0 +1,123 @@
+/* Reset body and html margin and padding */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;  /* Prevent unnecessary page scroll */
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Layout styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px 100px;  /* Add padding on left and right for margins */
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.main-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    height: 100%;  /* Set to 100% to fill the remaining viewport height */
+    box-sizing: border-box;
+}
+
+.left-column {
+    width: 28%; 
+    padding-right: 10px;
+    max-height: 100%;  
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+#curveDefinitions {
+    overflow-y: auto;  /* Enable vertical scroll only for this div */
+    max-height: calc(100vh - 120px); /* Adjust based on height needed for fixed items */
+    box-sizing: border-box;
+}
+
+/* Step size and other fixed settings above curveDefinitions */
+.stepSize, .curvedSettings {
+    flex-shrink: 0;  /* Ensure these remain at the top, fixed */
+    margin-bottom: 10px;
+}
+
+.right-column {
+    width: 68%; 
+    padding-left: 10px;
+    position: sticky;
+    top: 0;
+    height: 100%; /* Set to fill the remaining viewport height */
+    box-sizing: border-box;
+}
+
+/* Other styles */
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+label {
+    font-size: 14px;
+    margin: 5px 0;
+    display: block;
+}
+
+input, select {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;  /* Setzt den abgerundeten Radius */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* For curve definitions */
+.curveDefinition {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.curveDefinition input, .curveDefinition select {
+    width: 90%;
+    margin: 5px;
+}
+
+.trapezSettings {
+    margin-top: 10px;
+}
+
+button.removeCurveBtn {
+    background-color: red;
+    margin-top: 10px;
+}
+
+button.removeCurveBtn:hover {
+    background-color: darkred;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;  /* Center buttons horizontally */
+    gap: 50px;  /* Space between buttons */
+    margin-top: 20px;  /* Space between chart and buttons */
+}

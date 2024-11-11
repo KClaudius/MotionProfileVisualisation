@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion Profile Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MOTION PROFILE TOOL</h1>
+
+        <div class="main-content">
+            <!-- Left Column for Curve Definitions -->
+            <div class="left-column">
+                <h2>Curve Definitions</h2>
+                <!-- Step Size Input (Only once for all curves) -->
+                <div class="stepSize-input">
+                    <label>Step Size (seconds):</label>
+                    <input type="number" id="stepSize" value="0.01" step="0.01" min="0.01" max="1" required>
+                </div>
+
+                <!-- Dynamic Curve Definitions -->
+                <div id="curveDefinitions"></div>
+
+                <button id="addCurveBtn">Add Curve</button>
+                
+            </div>
+
+            <!-- Right Column for Graph Display -->
+            <div class="right-column hidden">
+                <h2>Graph Display</h2>
+                <canvas id="motionChart"></canvas>
+
+                <!-- Button Container to center buttons -->
+                <div class="button-container">
+                    <button id="calculateBtn">Calculate</button>
+                    <button id="exportCsvBtn">Export CSV</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const curveDefinitionsContainer = document.getElementById('curveDefinitions');
+
+        // Funktion zum Hinzufügen einer neuen Kurve mit Standardwerten
+        function addCurve(motionType = 'jerk', curveType = 'trapez', startTime = 0, duration = 0.25, amplitude = 1, rampUpPercent = 20, rampDownPercent = 20) {
+            const newCurveDef = document.createElement('div');
+            newCurveDef.classList.add('curveDefinition');
+
+            newCurveDef.innerHTML = `
+                <label>Select Motion Type:</label>
+                <select class="motionType" required>
+                    <option value="jerk" ${motionType === 'jerk' ? 'selected' : ''}>Jerk</option>
+                    <option value="acceleration" ${motionType === 'acceleration' ? 'selected' : ''}>Acceleration</option>
+                    <option value="speed" ${motionType === 'speed' ? 'selected' : ''}>Speed</option>
+                    <option value="position" ${motionType === 'position' ? 'selected' : ''}>Position</option>
+                </select>
+
+                <label>Select Curve Type:</label>
+                <select class="curveType" required>
+                    <option value="step" ${curveType === 'step' ? 'selected' : ''}>Step</option>
+                    <option value="trapez" ${curveType === 'trapez' ? 'selected' : ''}>Trapezoidal</option>
+                    <option value="halfsinus" ${curveType === 'halfsinus' ? 'selected' : ''}>Half-Sinusoidal</option>
+                </select>
+
+                <label>Start Time (seconds):</label>
+                <input type="number" class="startTime" value="${startTime}" step="0.01" min="0" required>
+
+                <label>Duration (in seconds):</label>
+                <input type="number" class="duration" value="${duration}" step="0.01" min="0.01" required>
+
+                <label>Amplitude:</label>
+                <input type="number" class="amplitude" value="${amplitude}" step="0.01" required>
+
+                <div class="trapezSettings" style="${curveType === 'trapez' ? 'display: block;' : 'display: none;'}">
+                    <label>Ramp-Up Percentage:</label>
+                    <input type="number" class="rampUpPercent" value="${rampUpPercent}" step="0.1" min="0" max="100" required>
+
+                    <label>Ramp-Down Percentage:</label>
+                    <input type="number" class="rampDownPercent" value="${rampDownPercent}" step="0.1" min="0" max="100" required>
+                </div>
+
+                <button class="removeCurveBtn">Remove Curve</button>
+            `;
+
+            curveDefinitionsContainer.appendChild(newCurveDef);
+
+            // Add event listener to remove the curve definition
+            const removeCurveBtn = newCurveDef.querySelector('.removeCurveBtn');
+            removeCurveBtn.addEventListener('click', function() {
+                newCurveDef.remove();
+            });
+
+            // Add event listener to show/hide ramp settings based on curve type selection
+            const curveTypeSelect = newCurveDef.querySelector('.curveType');
+            const trapezSettings = newCurveDef.querySelector('.trapezSettings');
+            curveTypeSelect.addEventListener('change', function() {
+                trapezSettings.style.display = curveTypeSelect.value === 'trapez' ? 'block' : 'none';
+            });
+        }
+
+        // Predefined curves as per your requirement
+        window.addEventListener('DOMContentLoaded', function() {
+            addCurve('jerk', 'trapez', 0, 0.25, 1, 20, 20);
+            addCurve('jerk', 'trapez', 0.5, 0.25, -1, 20, 20);
+            addCurve('jerk', 'trapez', 1.25, 0.25, -1, 20, 20);
+            addCurve('jerk', 'trapez', 1.75, 0.25, 1, 20, 20);
+
+            // Trigger the Calculate button click after all curves are added
+            calculateBtn.click();
+
+            // Entferne die `.hidden`-Klasse, um die Seite sichtbar zu machen
+            document.querySelector('.right-column').classList.remove('hidden');
+        });
+
+        // Button to add custom curves
+        document.getElementById('addCurveBtn').addEventListener('click', () => {
+            addCurve();  // Adds a new empty curve definition by default
+        });
+    </script>
+</body>
+</html>
